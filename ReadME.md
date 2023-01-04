@@ -19,9 +19,10 @@ The `ICP.cpp` code creates a resultant file called `result.txt` that stores the 
 
 In order, to visualize the point cloud I have written an implementation using the [PCL](https://pointclouds.org/) library. Run the following commands:
 For the code to run make sure to move a copy of `pclX.txt`, `pclY.txt` and `result.txt` file to the `build` folder.
-``
+
+```
 cd build
 cmake ..
 make
 ./point_cloud_visualization
-``
+```
