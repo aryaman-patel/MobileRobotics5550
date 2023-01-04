@@ -26,3 +26,5 @@ cmake ..
 make
 ./point_cloud_visualization
 ```
+The resultant point cloud in comparision to the original ones looks like this:
+![PCL](https://user-images.githubusercontent.com/117113574/210670258-9c4e113f-fc7f-473a-b349-026e137d9d5f.png)
