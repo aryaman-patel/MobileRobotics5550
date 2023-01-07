@@ -1,5 +1,5 @@
 # MobileRobotics5550
-This is a repository contraining my implementation of few of the algorithms I have written as a part of my EECE5550 Mobile Robotics course. 
+This is a repository containing my implementation of few of the algorithms I have written as a part of my EECE5550 Mobile Robotics course. 
 
 ## Scan matching using Iterative Closest Point
 In this I have implement the Iterative Closest Point (ICP) algorithm, and use it
