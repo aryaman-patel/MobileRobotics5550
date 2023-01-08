@@ -60,7 +60,7 @@ $\tilde{\varphi}_l = \dot{\varphi}_l + \epsilon_l,\ \ \epsilon_l \sim N(0,\sigma
  
 $\tilde{\varphi}_r = \dot{\varphi}_r + \epsilon_r,\ \ \epsilon_r \sim N(0,\sigma_r^2)$
 
-The generative motion model that parameterizes the distribution of the pose of the robot $x_{t2} \in SE(2)$ as a function of the pose $x_{t1} \in SE(2)$ at time $t_2$ is given by the exponential map:
+The generative motion model $p(x_{t2} | x_{t1} , \dot{\varphi_l},\dot{\varphi_r}, r, w, \sigma_l, \sigma_r)$ that parameterizes the distribution of the pose of the robot $x_{t2} \in SE(2)$ as a function of the pose $x_{t1} \in SE(2)$ at time $t_2$ is given by the exponential map:
 
 $P(X_0 | X_t, u) = P(X_0)*exp(t * \dot{\Omega}(\dot{\varphi}_l,\dot{\varphi}_r))$
 
