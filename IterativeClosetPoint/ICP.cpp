@@ -38,16 +38,12 @@ Tyx ComputeOptimalRigidRegistration(MatrixXd X, MatrixXd Y, MatrixXi C)
     JacobiSVD<MatrixXd> svd(W, Eigen::ComputeFullU | Eigen::ComputeFullV);
     MatrixXd U = svd.matrixU();
     MatrixXd V = svd.matrixV();
-    //std::cout << "U = " << U << std::endl;
-    //std::cout << "V = " << V << std::endl;
 
     // Construct optimal rotation
     T.Rot = U * V.transpose();
-    //std::cout << "T.Rot = " << T.Rot << std::endl;
 
     // Construct Optimal translation
     T.trans = y_centroid - (x_centroid.transpose()*T.Rot).transpose();
-    //std::cout << "T.trans = " << T.trans << std::endl;
 
     return T;
 }
@@ -69,17 +65,7 @@ MatrixXi EstimateCorrespondences(MatrixXd X, MatrixXd Y, Vector3d t, Matrix3d R,
     // Find the indexes in the least square sense. 
     for(int i =0; i < transposed_x.rows(); i++)
     {
-        // diff = Y.rowwise() - transposed_x.row(i);
-        // norm = diff.rowwise().norm();
         norm = (Y.rowwise() - transposed_x.row(i)).rowwise().norm();
-        // Print the first 10 elements of the norm vector. Debugging purposes.
-        // if (i == 0)
-        // {
-        //     std::cout << "X = " << X.row(0) << std::endl;
-        //     std::cout << "Y = " << Y.row(0) << std::endl;
-        //     std::cout << "transposed_x = " << transposed_x.row(0) << std::endl;
-        //     std::cout << norm.head(10) << std::endl;            
-        // }
         norm.minCoeff(&index);
         if (norm.coeff(index) < d_max)
         {
@@ -115,19 +101,16 @@ Tyx ICP_algo(MatrixXd X, MatrixXd Y, Vector3d t0, Matrix3d R0, double d_max, int
 }
 
 
-
-int main()
+static MatrixXd getMatrixFromFile(std::string fileName)
 {
-
-    // Create a vector of vector
     std::vector<std::vector<double>> data;
     double value;
     //Open the text file.
-    std::ifstream file("pclX.txt");
+    std::ifstream file(fileName);
     //Read the data from the file to the matrix
-    while(file >> value)
+    while (file >> value)
     {
-        data.push_back({value});
+        data.push_back({ value });
         while (file.peek() == ' ')
         {
             file >> value;
@@ -135,45 +118,28 @@ int main()
         }
     }
     file.close();
+
     int n_rows = data.size();
     int n_cols = data[0].size();
-    MatrixXd pcl_X(n_rows,n_cols);
+    MatrixXd pcl_data(n_rows, n_cols);
 
     for (int i = 0; i < n_rows; ++i)
     {
-        for (int j =0; j < n_cols; ++j)
+        for (int j = 0; j < n_cols; ++j)
         {
-            pcl_X(i,j) = data[i][j];
-        }
-    }
-    file.close();
-    // Similarly for pcl_Y
-    std::ifstream file_y("pclY.txt");
-    //Read the data from the file to the matrix
-    // Clear the data vector
-    data.clear();
-    while(file_y >> value)
-    {
-        data.push_back({value});
-        while (file_y.peek() == ' ')
-        {
-            file_y >> value;
-            data.back().push_back(value);
-        }
-    }
-    file_y.close();
-    n_rows = data.size();
-    n_cols = data[0].size();
-    MatrixXd pcl_Y(n_rows,n_cols);
-
-    for (int i = 0; i < n_rows; i++)
-    {
-        for (int j =0; j < n_cols; j++)
-        {
-            pcl_Y(i,j) = data[i][j];
+            pcl_data(i, j) = data[i][j];
         }
     }
 
+    return pcl_data;
+}
+
+int main()
+{
+    // Get the point cloud Matrix.
+    MatrixXd pcl_X = getMatrixFromFile("pclX.txt");
+    MatrixXd pcl_Y = getMatrixFromFile("pclY.txt");
+    
     // Initial translational vector and Rotational matrix
     Vector3d t = Vector3d::Zero();
     Matrix3d R = Matrix3d::Identity();  // Create a identity matrix.
@@ -181,18 +147,17 @@ int main()
     int iter = 30;
     Tyx result;
 
-    // std::cout << "pcl_X = " << pcl_X.row(0) << std::endl;
-    // std::cout << "pcl_Y = " << pcl_Y.row(0) << std::endl;
     clock_t begin = clock();
     result = ICP_algo(pcl_X, pcl_Y, t, R, d_max, iter);
     clock_t end  = clock();
     double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
     std::cout << "Time taken : " << elapsed_secs << std::endl;
 
-    std::cout << "\n Translation vector: " << result.trans << std::endl;
+    std::cout << "\n Translation vector: " << std::endl << result.trans << std::endl;
     std::cout << "-----------------------------" << std::endl;
-    std::cout << "Rotation matrix: " << result.Rot << std::endl;
+    std::cout << "Rotation matrix: " << std::endl << result.Rot << std::endl;
 
+    // Write a resultant point cloud to a file.
     MatrixXd result_pt_cloud(pcl_X.rows(),3);
     for(int i = 0; i < pcl_X.rows(); i++)
     {
