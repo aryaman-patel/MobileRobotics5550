@@ -13,7 +13,6 @@ struct Tyx
 {
     MatrixXd Rot;
     VectorXd trans;
-    MatrixXi Corresp;
 };
 
 // Rigid Registration.
