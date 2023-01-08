@@ -47,7 +47,7 @@ The image below is the all the connected nodes of the sampled points based on th
 The final output with sampled points-
 
 ![prm](https://user-images.githubusercontent.com/117113574/211174071-dc3a9822-6206-4694-b0da-1034e5425b76.png)
-nts - 
+
 
 ## State estimation by (Monte-Carlo) Partile Filter on a Lie Group -
 In this exercise, I have applied particle filtering to perform state estimation over a Lie group:
@@ -65,4 +65,9 @@ The generative motion model $p(x_{t2} | x_{t1} , \dot{\varphi_l},\dot{\varphi_r}
 $P(X_0 | X_t, u) = P(X_0)*exp(t * \dot{\Omega}(\dot{\varphi}_l,\dot{\varphi}_r))$
 
 where $\dot{\Omega}$ is an element in the $Lie(SE(2))$ characterized by the wheel speeds $(\dot{\varphi}_l,\dot{\varphi}_r)$
+
+Output by Particle Filter for the time stamps [0,5,10,15,20] with the measurement updates -
+
+![output](https://user-images.githubusercontent.com/117113574/211174996-e9fd8539-6936-4ea7-873e-179e67bd53c9.png)
+
 
